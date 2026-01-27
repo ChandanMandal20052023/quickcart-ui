@@ -4,10 +4,19 @@ import MainLayout from "@/components/layout/MainLayout";
 import ShopButton from "@/components/ui/ShopButton";
 import ProductCard from "@/components/product/ProductCard";
 import CategoryCard from "@/components/product/CategoryCard";
+import PromoBanner from "@/components/promo/PromoBanner";
+import DealsSection from "@/components/promo/DealsSection";
 import { categories, getFeaturedProducts } from "@/data/products";
 
 const Index = () => {
   const featuredProducts = getFeaturedProducts();
+
+  // Create promo end dates
+  const promoEndDate = new Date();
+  promoEndDate.setHours(promoEndDate.getHours() + 12); // 12 hours from now
+
+  const weekendSaleDate = new Date();
+  weekendSaleDate.setHours(weekendSaleDate.getHours() + 48); // 48 hours from now
 
   const features = [
     {
@@ -82,6 +91,23 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Promotional Banners */}
+      <section className="py-8 md:py-12">
+        <div className="container-main space-y-4">
+          <PromoBanner
+            title="Fresh Fruits & Veggies Sale"
+            subtitle="Get farm-fresh produce delivered in 10 minutes"
+            discount="Up to 40% OFF"
+            bgGradient="bg-gradient-to-r from-success to-success/70"
+            targetDate={promoEndDate}
+            ctaText="Shop Fresh"
+          />
+        </div>
+      </section>
+
+      {/* Flash Deals Section */}
+      <DealsSection />
+
       {/* Categories Section */}
       <section className="py-12 md:py-16">
         <div className="container-main">
@@ -106,6 +132,20 @@ const Index = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Second Promo Banner */}
+      <section className="py-4 md:py-8">
+        <div className="container-main">
+          <PromoBanner
+            title="Weekend Special"
+            subtitle="Exclusive discounts on snacks, beverages & more"
+            discount="FLAT ₹100 OFF"
+            bgGradient="bg-gradient-to-r from-primary to-primary/70"
+            targetDate={weekendSaleDate}
+            ctaText="Grab Deals"
+          />
         </div>
       </section>
 
