@@ -1,18 +1,58 @@
-import { useState } from "react";
-import { Filter, Grid3X3, List } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Filter, Search, X } from "lucide-react";
 import MainLayout from "@/components/layout/MainLayout";
 import ProductCard from "@/components/product/ProductCard";
 import ShopButton from "@/components/ui/ShopButton";
 import { products, categories } from "@/data/products";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [localSearch, setLocalSearch] = useState(searchParams.get("search") || "");
+  
+  const debouncedSearch = useDebounce(localSearch, 300);
 
-  const filteredProducts =
-    selectedCategory === "all"
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
+  // Sync URL search param with local state
+  useEffect(() => {
+    const urlSearch = searchParams.get("search") || "";
+    if (urlSearch !== localSearch) {
+      setLocalSearch(urlSearch);
+    }
+  }, [searchParams]);
+
+  // Update URL when debounced search changes
+  useEffect(() => {
+    const currentSearch = searchParams.get("search") || "";
+    if (debouncedSearch !== currentSearch) {
+      if (debouncedSearch) {
+        setSearchParams({ search: debouncedSearch });
+      } else {
+        searchParams.delete("search");
+        setSearchParams(searchParams);
+      }
+    }
+  }, [debouncedSearch]);
+
+  // Filter products based on category and search
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+    const searchTerm = debouncedSearch.toLowerCase();
+    const matchesSearch = !searchTerm || 
+      product.name.toLowerCase().includes(searchTerm) ||
+      product.description.toLowerCase().includes(searchTerm) ||
+      product.category.toLowerCase().includes(searchTerm);
+    
+    return matchesCategory && matchesSearch;
+  });
+
+  const clearSearch = () => {
+    setLocalSearch("");
+    searchParams.delete("search");
+    setSearchParams(searchParams);
+  };
 
   return (
     <MainLayout>
@@ -20,11 +60,36 @@ const Products = () => {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            All Products
+            {debouncedSearch ? `Search results for "${debouncedSearch}"` : "All Products"}
           </h1>
           <p className="text-muted-foreground">
-            Browse our wide selection of fresh groceries and essentials
+            {debouncedSearch 
+              ? `Found ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`
+              : "Browse our wide selection of fresh groceries and essentials"
+            }
           </p>
+        </div>
+
+        {/* Search bar for Products page */}
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Filter products..."
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              className="input-field pl-12 pr-10"
+            />
+            {localSearch && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="flex gap-6">
@@ -136,15 +201,34 @@ const Products = () => {
             {/* Empty State */}
             {filteredProducts.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-muted-foreground text-lg mb-4">
-                  No products found in this category
+                <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-10 h-10 text-muted-foreground" />
+                </div>
+                <p className="text-foreground text-lg font-medium mb-2">
+                  No products found
                 </p>
-                <ShopButton
-                  variant="secondary"
-                  onClick={() => setSelectedCategory("all")}
-                >
-                  View All Products
-                </ShopButton>
+                <p className="text-muted-foreground mb-6">
+                  {debouncedSearch 
+                    ? `We couldn't find any products matching "${debouncedSearch}"`
+                    : "No products found in this category"
+                  }
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  {debouncedSearch && (
+                    <ShopButton variant="outline" onClick={clearSearch}>
+                      Clear Search
+                    </ShopButton>
+                  )}
+                  <ShopButton
+                    variant="secondary"
+                    onClick={() => {
+                      setSelectedCategory("all");
+                      clearSearch();
+                    }}
+                  >
+                    View All Products
+                  </ShopButton>
+                </div>
               </div>
             )}
           </div>
