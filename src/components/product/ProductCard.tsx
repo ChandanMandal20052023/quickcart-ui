@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Plus, Clock, Heart } from "lucide-react";
+import { toast } from "sonner";
 import ShopButton from "@/components/ui/ShopButton";
 import { useWishlist } from "@/contexts/WishlistContext";
 
@@ -30,13 +31,22 @@ const ProductCard = ({
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // UI only - no actual cart logic
+    toast.success(`${name} added to cart`, {
+      description: `${unit} • ₹${price}`,
+    });
   };
 
   const handleToggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     toggleWishlist(id);
+    if (isWishlisted) {
+      toast.info(`${name} removed from wishlist`);
+    } else {
+      toast.success(`${name} added to wishlist`, {
+        description: "View your saved items anytime",
+      });
+    }
   };
 
   return (
