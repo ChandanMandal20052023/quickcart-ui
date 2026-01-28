@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Clock, Plus, Flame } from "lucide-react";
+import { Clock, Plus, Flame, Heart } from "lucide-react";
 import CountdownTimer from "./CountdownTimer";
 import ShopButton from "@/components/ui/ShopButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface DealCardProps {
   id: string;
@@ -26,10 +27,19 @@ const DealCard = ({
   targetDate,
   isHot = false,
 }: DealCardProps) => {
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const isWishlisted = isInWishlist(id);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     // UI only - no actual cart logic
+  };
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(id);
   };
 
   return (
@@ -47,6 +57,18 @@ const DealCard = ({
         <div className="absolute top-2 left-2 z-10 px-2 py-1 rounded-md bg-success text-success-foreground text-xs font-bold">
           {discount}% OFF
         </div>
+
+        {/* Wishlist button */}
+        <button
+          onClick={handleToggleWishlist}
+          className={`absolute top-12 right-2 z-10 p-2 rounded-full transition-all ${
+            isWishlisted
+              ? "bg-destructive text-destructive-foreground"
+              : "bg-background/80 text-muted-foreground hover:text-destructive"
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+        </button>
 
         {/* Image container */}
         <div className="relative aspect-square mb-3 rounded-lg overflow-hidden bg-muted">

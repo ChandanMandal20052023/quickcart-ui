@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, MapPin, Loader2 } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, MapPin, Loader2, Heart } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { products, Product } from "@/data/products";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,6 +16,7 @@ const Header = () => {
 
   const debouncedQuery = useDebounce(searchQuery, 300);
   const cartItemCount = 3; // Static for UI demo
+  const { wishlistCount } = useWishlist();
 
   // Search results
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -182,7 +184,21 @@ const Header = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className="relative p-2 rounded-lg hover:bg-muted transition-colors"
+              title="Wishlist"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+
             {/* Cart */}
             <Link
               to="/cart"
