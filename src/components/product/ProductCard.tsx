@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Plus, Clock } from "lucide-react";
+import { Plus, Clock, Heart } from "lucide-react";
 import ShopButton from "@/components/ui/ShopButton";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 interface ProductCardProps {
   id: string;
@@ -23,10 +24,19 @@ const ProductCard = ({
   deliveryTime = "10 mins",
   discount,
 }: ProductCardProps) => {
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const isWishlisted = isInWishlist(id);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     // UI only - no actual cart logic
+  };
+
+  const handleToggleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(id);
   };
 
   return (
@@ -44,6 +54,16 @@ const ProductCard = ({
               {discount}% OFF
             </div>
           )}
+          <button
+            onClick={handleToggleWishlist}
+            className={`absolute top-2 right-2 p-2 rounded-full transition-all ${
+              isWishlisted
+                ? "bg-destructive text-destructive-foreground"
+                : "bg-background/80 text-muted-foreground hover:text-destructive"
+            }`}
+          >
+            <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+          </button>
         </div>
 
         {/* Delivery time */}

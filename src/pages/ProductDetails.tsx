@@ -5,10 +5,12 @@ import MainLayout from "@/components/layout/MainLayout";
 import ShopButton from "@/components/ui/ShopButton";
 import ProductCard from "@/components/product/ProductCard";
 import { getProductById, products } from "@/data/products";
+import { useWishlist } from "@/contexts/WishlistContext";
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [quantity, setQuantity] = useState(1);
+  const { isInWishlist, toggleWishlist } = useWishlist();
 
   const product = getProductById(id || "");
   const relatedProducts = products.filter((p) => p.id !== id).slice(0, 4);
@@ -141,8 +143,15 @@ const ProductDetails = () => {
               >
                 Add to Cart - ₹{product.price * quantity}
               </ShopButton>
-              <button className="p-4 rounded-xl border-2 border-border hover:border-primary hover:text-primary transition-colors">
-                <Heart className="w-6 h-6" />
+              <button
+                onClick={() => toggleWishlist(product.id)}
+                className={`p-4 rounded-xl border-2 transition-colors ${
+                  isInWishlist(product.id)
+                    ? "bg-destructive border-destructive text-destructive-foreground"
+                    : "border-border hover:border-primary hover:text-primary"
+                }`}
+              >
+                <Heart className={`w-6 h-6 ${isInWishlist(product.id) ? "fill-current" : ""}`} />
               </button>
             </div>
 
