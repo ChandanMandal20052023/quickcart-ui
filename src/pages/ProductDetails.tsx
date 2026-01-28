@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Minus, Plus, Clock, Shield, Truck, Heart } from "lucide-react";
+import { toast } from "sonner";
 import MainLayout from "@/components/layout/MainLayout";
 import ShopButton from "@/components/ui/ShopButton";
 import ProductCard from "@/components/product/ProductCard";
@@ -140,11 +141,26 @@ const ProductDetails = () => {
                 size="lg"
                 className="flex-1"
                 disabled={!product.inStock}
+                onClick={() => {
+                  toast.success(`${product.name} added to cart`, {
+                    description: `${quantity} × ₹${product.price} = ₹${product.price * quantity}`,
+                  });
+                }}
               >
                 Add to Cart - ₹{product.price * quantity}
               </ShopButton>
               <button
-                onClick={() => toggleWishlist(product.id)}
+                onClick={() => {
+                  const wasInWishlist = isInWishlist(product.id);
+                  toggleWishlist(product.id);
+                  if (wasInWishlist) {
+                    toast.info(`${product.name} removed from wishlist`);
+                  } else {
+                    toast.success(`${product.name} added to wishlist`, {
+                      description: "View your saved items anytime",
+                    });
+                  }
+                }}
                 className={`p-4 rounded-xl border-2 transition-colors ${
                   isInWishlist(product.id)
                     ? "bg-destructive border-destructive text-destructive-foreground"
