@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, MapPin, Loader2, Heart } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, MapPin, Loader2, Heart, Sparkles, LayoutDashboard } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { products, Product } from "@/data/products";
 import { useWishlist } from "@/contexts/WishlistContext";
@@ -185,6 +185,15 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Smart List */}
+            <Link
+              to="/smart-list"
+              className="relative p-2 rounded-lg hover:bg-muted transition-colors"
+              title="My Smart List"
+            >
+              <Sparkles className="w-5 h-5 text-primary" />
+            </Link>
+
             {/* Wishlist */}
             <Link
               to="/wishlist"
@@ -220,6 +229,15 @@ const Header = () => {
             >
               <User className="w-5 h-5" />
               <span>Login</span>
+            </Link>
+
+            {/* Admin Link */}
+            <Link
+              to="/admin"
+              className="hidden lg:flex items-center gap-2 p-2 rounded-lg hover:bg-muted transition-colors"
+              title="Admin Dashboard"
+            >
+              <LayoutDashboard className="w-5 h-5 text-muted-foreground" />
             </Link>
 
             {/* Mobile menu toggle */}
@@ -333,13 +351,24 @@ const Header = () => {
                 Login
               </Link>
               <Link
-                to="/register"
+                to="/smart-list"
                 onClick={() => setIsMenuOpen(false)}
-                className={`px-4 py-3 rounded-lg font-medium transition-colors ${
-                  isActive("/register") ? "bg-secondary text-primary" : "hover:bg-muted"
+                className={`px-4 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  isActive("/smart-list") ? "bg-secondary text-primary" : "hover:bg-muted"
                 }`}
               >
-                Register
+                <Sparkles className="w-4 h-4 text-primary" />
+                My Smart List
+              </Link>
+              <Link
+                to="/admin"
+                onClick={() => setIsMenuOpen(false)}
+                className={`px-4 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  isActive("/admin") ? "bg-secondary text-primary" : "hover:bg-muted"
+                }`}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Admin Dashboard
               </Link>
             </div>
           </nav>
