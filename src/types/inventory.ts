@@ -1,5 +1,45 @@
 // Types for AI-powered inventory management features
 
+// Loose product types for barcode generation
+export interface LooseProduct {
+  id: string;
+  name: string;
+  nameHindi?: string;
+  category: 'grains' | 'pulses' | 'spices' | 'vegetables' | 'dry-fruits' | 'flours';
+  pricePerKg: number;
+  image: string;
+  unit: 'kg' | 'g' | '100g';
+  minWeight: number; // in grams
+  maxWeight: number; // in grams
+  inStock: boolean;
+  stockQuantity: number; // in kg
+}
+
+export interface GeneratedBarcode {
+  id: string;
+  barcodeNumber: string;
+  productId: string;
+  productName: string;
+  category: string;
+  shopId: string;
+  weight: number; // in grams
+  pricePerKg: number;
+  totalPrice: number;
+  batchReference: string;
+  generatedAt: string;
+  expiryDate?: string;
+  isPrinted: boolean;
+  isSold: boolean;
+}
+
+export interface BarcodeSession {
+  id: string;
+  date: string;
+  totalBarcodes: number;
+  totalValue: number;
+  barcodes: GeneratedBarcode[];
+}
+
 export interface ExpiryProduct {
   id: string;
   productId: string;

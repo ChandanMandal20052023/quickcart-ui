@@ -21,6 +21,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ExpiryDetection from "./pages/admin/ExpiryDetection";
 import AutoReorder from "./pages/admin/AutoReorder";
 import CustomerInsights from "./pages/admin/CustomerInsights";
+import BarcodeGenerator from "./pages/admin/BarcodeGenerator";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/barcode" element={<BarcodeGenerator />} />
             <Route path="/admin/expiry" element={<ExpiryDetection />} />
             <Route path="/admin/reorder" element={<AutoReorder />} />
             <Route path="/admin/customers" element={<CustomerInsights />} />

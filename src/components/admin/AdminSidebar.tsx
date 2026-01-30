@@ -8,7 +8,8 @@ import {
   Bell,
   Settings,
   ChevronLeft,
-  Store
+  Store,
+  QrCode
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,7 @@ const AdminSidebar = ({ isCollapsed = false, onToggle }: AdminSidebarProps) => {
 
   const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+    { path: '/admin/barcode', icon: QrCode, label: 'Barcode Generator' },
     { path: '/admin/expiry', icon: AlertTriangle, label: 'Expiry Detection' },
     { path: '/admin/reorder', icon: TrendingUp, label: 'Auto Reorder' },
     { path: '/admin/customers', icon: Users, label: 'Customer Insights' },
