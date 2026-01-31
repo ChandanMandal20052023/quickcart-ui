@@ -138,3 +138,46 @@ export interface DashboardStats {
   potentialLoss: number;
   savingsFromAI: number;
 }
+
+// Fraud & Anomaly Detection types
+export interface FraudAlert {
+  id: string;
+  type: 'unusual_discount' | 'inventory_shrinkage' | 'void_abuse' | 'refund_anomaly' | 'price_manipulation' | 'time_anomaly';
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  riskScore: number; // 0-100
+  title: string;
+  description: string;
+  affectedItems: string[];
+  detectedAt: string;
+  status: 'open' | 'investigating' | 'resolved' | 'dismissed';
+  assignedTo?: string;
+  potentialLoss: number;
+  resolution?: string;
+}
+
+export interface InventoryMismatch {
+  id: string;
+  productId: string;
+  productName: string;
+  category: string;
+  systemQuantity: number;
+  physicalQuantity: number;
+  variance: number;
+  variancePercentage: number;
+  lastAuditDate: string;
+  lastSaleDate: string;
+  potentialCause: string;
+  severity: 'high' | 'medium' | 'low';
+}
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  action: 'login' | 'logout' | 'price_override' | 'discount_applied' | 'void_transaction' | 'refund_processed' | 'inventory_adjustment' | 'end_of_day';
+  userId: string;
+  userName: string;
+  details: string;
+  ipAddress: string;
+  riskFlag: boolean;
+  relatedAlertId?: string;
+}
