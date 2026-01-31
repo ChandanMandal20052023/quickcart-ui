@@ -22,7 +22,7 @@ import ExpiryDetection from "./pages/admin/ExpiryDetection";
 import AutoReorder from "./pages/admin/AutoReorder";
 import CustomerInsights from "./pages/admin/CustomerInsights";
 import BarcodeGenerator from "./pages/admin/BarcodeGenerator";
-
+import FraudDetection from "./pages/admin/FraudDetection";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -51,6 +51,7 @@ const App = () => (
             <Route path="/admin/expiry" element={<ExpiryDetection />} />
             <Route path="/admin/reorder" element={<AutoReorder />} />
             <Route path="/admin/customers" element={<CustomerInsights />} />
+            <Route path="/admin/fraud" element={<FraudDetection />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

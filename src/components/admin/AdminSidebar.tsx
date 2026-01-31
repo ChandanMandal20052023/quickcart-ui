@@ -9,7 +9,8 @@ import {
   Settings,
   ChevronLeft,
   Store,
-  QrCode
+  QrCode,
+  Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +27,7 @@ const AdminSidebar = ({ isCollapsed = false, onToggle }: AdminSidebarProps) => {
     { path: '/admin/barcode', icon: QrCode, label: 'Barcode Generator' },
     { path: '/admin/expiry', icon: AlertTriangle, label: 'Expiry Detection' },
     { path: '/admin/reorder', icon: TrendingUp, label: 'Auto Reorder' },
+    { path: '/admin/fraud', icon: Shield, label: 'Fraud Detection' },
     { path: '/admin/customers', icon: Users, label: 'Customer Insights' },
     { path: '/admin/alerts', icon: Bell, label: 'Alerts' },
     { path: '/admin/settings', icon: Settings, label: 'Settings' },
